@@ -1,35 +1,26 @@
-import Phaser from 'phaser'
-import WebFont from 'webfontloader'
+import Phaser from 'phaser';
+import { AssetLoader } from 'phaser-manifest-loader';
+
+import manifest from '../config.assetManifest';
+import kuler from '../util/kuler';
+
+const req = require.context('../assets', true, /.*\.png|json|ttf|woff|woff2|xml|mp3|jpg$/);
 
 export default class extends Phaser.State {
   init () {
-    this.stage.backgroundColor = '#EDEEC9'
-    this.fontsReady = false
-    this.fontsLoaded = this.fontsLoaded.bind(this)
+    const scheme = kuler(272);
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    this.stage.backgroundColor = scheme.mainShade;
   }
 
   preload () {
-    WebFont.load({
-      google: {
-        families: ['Bangers']
-      },
-      active: this.fontsLoaded
-    })
-
-    let text = this.add.text(this.world.centerX, this.world.centerY, 'loading fonts', { font: '16px Arial', fill: '#dddddd', align: 'center' })
-    text.anchor.setTo(0.5, 0.5)
-
-    this.load.image('loaderBg', './assets/images/loader-bg.png')
-    this.load.image('loaderBar', './assets/images/loader-bar.png')
+    this.manifestLoader = this.game.plugins.add(AssetLoader, req).loadManifest(manifest)
+      .then(() => {
+        this.state.start('Game');
+      });
   }
 
   render () {
-    if (this.fontsReady) {
-      this.state.start('Splash')
-    }
-  }
 
-  fontsLoaded () {
-    this.fontsReady = true
   }
 }

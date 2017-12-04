@@ -1,34 +1,71 @@
 /* globals __DEV__ */
-import Phaser from 'phaser'
-import Mushroom from '../sprites/Mushroom'
+import Phaser, { Tilemap } from 'phaser';
+
+// function imports
+import Rectangle from '../sprites/Rectangle';
+import Player1 from '../sprites/Player1';
+
+import globals from '../config.globals';
+
+import createCarriage from '../generators/createRoom';
+
+const {
+  blockSize: BLOCK_SIZE,
+  worldHeight,
+  worldWidth
+} = globals;
 
 export default class extends Phaser.State {
-  init () {}
-  preload () {}
+  constructor(game) {
+    super(game, 0, 0);
+    globals.game = game;
+  }
+
+  initMap () {
+    const { game } = globals;
+    globals.map = game.add.tilemap();
+
+    const { map } = globals;
+    map.addTilesetImage('walls', 'scifi_platformTiles_32x32', BLOCK_SIZE, BLOCK_SIZE);
+    map.setCollisionBetween(1, 2000);
+    globals.collisionLayer = map.create('level1', worldWidth, worldHeight, BLOCK_SIZE, BLOCK_SIZE);
+
+    const { collisionLayer } = globals;
+    collisionLayer.resizeWorld();
+    game.add.existing(collisionLayer);
+    globals.underLayer.add(collisionLayer);
+  }
+
+  preload () {
+    const { game } = globals;
+  }
 
   create () {
-    const bannerText = 'Phaser + ES6 + Webpack'
-    let banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText)
-    banner.font = 'Bangers'
-    banner.padding.set(10, 16)
-    banner.fontSize = 40
-    banner.fill = '#77BFA3'
-    banner.smoothed = false
-    banner.anchor.setTo(0.5)
+    const { game } = globals;
+    globals.cursors = game.input.keyboard.createCursorKeys();
 
-    this.mushroom = new Mushroom({
-      game: this.game,
-      x: this.world.centerX,
-      y: this.world.centerY,
-      asset: 'mushroom'
-    })
+    globals.underLayer = game.add.group();
+    globals.playerLayer = game.add.group();
+    globals.abovePlayerLayer = game.add.group();
 
-    this.game.add.existing(this.mushroom)
+    this.initMap();
+
+    createCarriage();
+
+    globals.player = new Player1({ x: 50, y: 50 });
+
+    const { player } = globals;
+    globals.game.add.existing(player);
+  }
+
+  update() {
+    globals.player.update();
   }
 
   render () {
+    const { game } = globals;
     if (__DEV__) {
-      this.game.debug.spriteInfo(this.mushroom, 32, 32)
+      // this.game.debug.body(globals.player, 'rgba(255,0,0,0.5)');
     }
   }
 }
