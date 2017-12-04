@@ -1,7 +1,9 @@
 # Paris Night Train 🗼🌃🚋
 
 #### Load it: `npm install` || `yarn install`
-#### To run: `npm run start` || `yarn run start`
+#### Run dev server: `npm run start` || `yarn run start`
+#### Deploy: `npm run deploy`
+#### [Cordova](https://github.com/lean/phaser-es6-webpack)
 
 ## This is a game about quiet endings.
 
@@ -17,3 +19,8 @@ Some company, maybe - they're hoping the night train will help them figure it ou
 
 ### Mechanics:
 This is an early build designed to sample how you can procedurally generate levels in [Phaser-CE](http://phaser.io/). It represents a bunch of work updating and patching and reverting [Phaser-ES6-Webpack](https://github.com/lean/phaser-es6-webpack), and a bunch of work in various examples and tutorials for how to do a top-town tilemap driven game.
+
+#### Thank You Notes:
+- Thanks to [Lean Phaser ES6](https://github.com/lean/phaser-es6-webpack)
+- Thanks to [Phaser Manifest Loader](https://github.com/mattcolman/phaser-manifest-loader)
+- Thanks to [🖐👁🕹 The Toronto Hand Eye Society 🖐👁🕹](http://handeyesociety.com/) 
