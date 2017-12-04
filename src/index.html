@@ -12,9 +12,21 @@
     <style>
         html,
         body {
-            margin: 0;
+            margin: 0 auto;
+            position: relative;
             padding: 0;
             background: #000;
+        }
+        div {
+            width: 65%;
+            margin: 0 auto;
+        }
+        h1 {
+            color: pink;
+            font-family: Helvetica, 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            display: block;
+            position: relative;
+            text-align: center;
         }
         canvas {
             margin: 0 auto;
@@ -23,8 +35,13 @@
 </head>
 
 <body>
-
-    <div id="content"></div>
+    <div>
+        <h1 id='title'>
+            Paris Night Train
+        </h1>
+    </div>
+    <div id="content">
+    </div>
     <!-- uncomment the line bellow for cordova feature -->
     <!-- <script type="text/javascript" src="cordova.js"></script> -->
 </body>
