@@ -15,7 +15,9 @@ class Game extends Phaser.Game {
     this.state.add('Game', GameState, false);
     globals.game = this;
 
-    // with Cordova with need to wait that the device is ready so we will call the Boot state in another file
+    // when using cordova,
+    // you need to wait for a device to be ready
+    // Call the boot state in another file to enforce task order
     if (!window.cordova) {
       this.state.start('Boot');
     }
@@ -35,7 +37,6 @@ if (window.cordova) {
     },
 
     // deviceready Event Handler
-    //
     onDeviceReady: function () {
       this.receivedEvent('deviceready');
 
