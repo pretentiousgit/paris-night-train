@@ -1,17 +1,19 @@
-var path = require('path')
-var webpack = require('webpack')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
-var BrowserSyncPlugin = require('browser-sync-webpack-plugin')
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+// const glFragmentLoader = require('phaser-glsl-loader');
 
 // Phaser webpack config
-var phaserModule = path.join(__dirname, '/node_modules/phaser-ce/')
-var phaser = path.join(phaserModule, 'build/custom/phaser-split.js')
-var pixi = path.join(phaserModule, 'build/custom/pixi.js')
-var p2 = path.join(phaserModule, 'build/custom/p2.js')
+const phaserModule = path.join(__dirname, '/node_modules/phaser-ce/');
+const phaser = path.join(phaserModule, 'build/custom/phaser-split.js');
+const pixi = path.join(phaserModule, 'build/custom/pixi.js');
+const p2 = path.join(phaserModule, 'build/custom/p2.js');
+const glFragmentLoader = path.join(__dirname, '/node_modules/phaser-glsl-loader');
 
-var definePlugin = new webpack.DefinePlugin({
+const definePlugin = new webpack.DefinePlugin({
   __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true'))
-})
+});
 
 module.exports = {
   entry: {
@@ -31,7 +33,7 @@ module.exports = {
   watch: true,
   plugins: [
     definePlugin,
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */}),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */ }),
     new HtmlWebpackPlugin({
       filename: '../index.html',
       template: './src/index.html',
@@ -59,10 +61,60 @@ module.exports = {
   ],
   module: {
     rules: [
+      { test: /\.json$/, use: 'file-loader' },
       { test: /\.js$/, use: ['babel-loader'], include: path.join(__dirname, 'src') },
       { test: /pixi\.js/, use: ['expose-loader?PIXI'] },
       { test: /phaser-split\.js$/, use: ['expose-loader?Phaser'] },
-      { test: /p2\.js/, use: ['expose-loader?p2'] }
+      { test: /p2\.js/, use: ['expose-loader?p2'] },
+      { test: /\.frag$/i, use: ['gl-fragment-loader'] },
+      {
+        test: /\.woff|\.woff2|\.svg|.eot|\.ttf/,
+        use: 'url-loader?prefix=font/&limit=10000&name=[name]-[hash].[ext]'
+      },
+      {
+        test: /\.mp3$/,
+        use: 'file-loader?hash=sha512&digest=hex&name=[name]-[hash].[ext]'
+      },
+      {
+        test: /\.(png)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              hash: 'sha512',
+              digest: 'hex',
+              name: '[name]-[hash].[ext]'
+            }
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              progressive: true,
+              optipng: {
+                optimizationLevel: 7
+              },
+              gifsicle: {
+                interlaced: false
+              }
+            }
+          }
+        ]
+      },
+      {
+        test: /\.jpg$/,
+        use: [
+          {
+            loader: 'url-loader?hash=sha512&digest=hex&name=[name]-[hash].[ext]',
+            options: {
+              limit: 25000
+            }
+          }
+        ]
+      },
+      {
+        test: /\.xml$/,
+        use: 'file-loader?hash=sha512&digest=hex&name=[name]-[hash].[ext]'
+      }
     ]
   },
   node: {
@@ -72,9 +124,12 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'phaser': phaser,
-      'pixi': pixi,
-      'p2': p2
+      root: path.resolve(__dirname, 'src'),
+      assets: path.join(__dirname, 'assets'),
+      'gl-fragment-loader': glFragmentLoader,
+      phaser: phaser,
+      pixi: pixi,
+      p2: p2
     }
   }
-}
+};
