@@ -1,5 +1,7 @@
 node_modules/
 www/
+promoGifs/*
+referenceImages/
 platforms/
 plugins/
 dist/
@@ -7,3 +9,4 @@ dist/
 *.log
 package-lock.json
 /index.html
+*.gif
