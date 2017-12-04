@@ -1,8 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-// const glFragmentLoader = require('phaser-glsl-loader');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // Phaser webpack config
 const phaserModule = path.join(__dirname, '/node_modules/phaser-ce/');
@@ -33,9 +32,12 @@ module.exports = {
   watch: true,
   plugins: [
     definePlugin,
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */ }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor'/* chunkName= */,
+      filename: 'vendor.bundle.js'/* filename= */
+    }),
     new HtmlWebpackPlugin({
-      filename: '../index.html',
+      filename: 'index.html',
       template: './src/index.html',
       chunks: ['vendor', 'app'],
       chunksSortMode: 'manual',
@@ -55,7 +57,7 @@ module.exports = {
       host: process.env.IP || 'localhost',
       port: process.env.PORT || 3000,
       server: {
-        baseDir: ['./', './build']
+        baseDir: ['./', './dist']
       }
     })
   ],
