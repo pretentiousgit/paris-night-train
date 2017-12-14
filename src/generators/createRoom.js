@@ -76,4 +76,5 @@ export default function createCarriage() {
   createRoom(0, 0);
   createRoom(thirds * 1, 0);
   createRoom(thirds * 2, 0);
+  row(0, worldHeight - 1, worldWidth, globals.collisionLayer, globals.map);
 }
