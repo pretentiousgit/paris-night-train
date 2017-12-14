@@ -58,12 +58,15 @@ export default class extends Phaser.State {
     createCarriage();
 
     globals.playerLayer.add(globals.player);
-    globals.playerHealth = new HealthBar(game, { x: 150, y: 50, layer: globals.abovePlayerLayer });
+    globals.playerHealth = new HealthBar(game, {
+      x: 150, y: 50, layer: globals.abovePlayerLayer, player: globals.player
+    });
     globals.playerHealth.setFixedToCamera(true);
   }
 
   update() {
     globals.player.update();
+    globals.playerHealth.update();
   }
 
   render () {

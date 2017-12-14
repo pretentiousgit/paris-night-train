@@ -20,6 +20,7 @@
  SOFTWARE.
  */
 
+
 function HealthBar (game, providedConfig) {
   this.game = game;
 
@@ -146,8 +147,8 @@ function setPercent(newPercentage) {
   this.setWidth(newWidth);
 }
 
-function setBarColor(newHexColor) {
-  const bmd = this.barSprite.key;
+function setSpriteColour(newHexColor, spriteKey, opacity = 255) {
+  const bmd = spriteKey;
   bmd.update();
 
   const currentRGBColor = bmd.getPixelRGB(0, 0);
@@ -156,12 +157,12 @@ function setBarColor(newHexColor) {
     currentRGBColor.r,
     currentRGBColor.g,
     currentRGBColor.b,
-    255,
+    opacity,
 
     newRGBColor.r,
     newRGBColor.g,
     newRGBColor.b,
-    255
+    opacity
   );
 }
 
@@ -182,6 +183,22 @@ function kill() {
   this.bgSprite.kill();
   this.barSprite.kill();
 }
+function checkOverlap(spriteA, spriteB) {
+  const boundsA = spriteA.getBounds();
+  const boundsB = spriteB.getBounds();
+
+  return Phaser.Rectangle.intersects(boundsA, boundsB);
+}
+
+function update() {
+  if (checkOverlap(this.bgSprite, this.config.player)) {
+    this.bgSprite.alpha = 0.5;
+    this.barSprite.alpha = 0.5;
+  } else {
+    this.bgSprite.alpha = 1;
+    this.barSprite.alpha = 1;
+  }
+}
 
 const prototypeUpdate = {
   constructor: HealthBar,
@@ -191,10 +208,11 @@ const prototypeUpdate = {
   drawHealthBar: drawHealthBar,
   setPosition: setPosition,
   setPercent: setPercent,
-  setBarColor: setBarColor,
+  setSpriteColour: setSpriteColour,
   setWidth: setWidth,
   setFixedToCamera: setFixedToCamera,
-  kill: kill
+  kill: kill,
+  update: update
 };
 
 HealthBar.prototype = { ...HealthBar.prototype, ...prototypeUpdate };
