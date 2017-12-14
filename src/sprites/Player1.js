@@ -1,33 +1,5 @@
 import Phaser from 'phaser';
 import globals from '../config.globals';
-// export default class extends Phaser.Sprite {
-//   constructor ({
-//     game, x, y, asset
-//   }) {
-//     super(game, x, y, asset);
-//     this.anchor.setTo(0.5);
-//     this.body.bounce.y = 0.2;
-//     this.body.bounce.x = 0.2;
-//     this.body.collideWorldBounds = true;
-//     game.physics.arcade.enable(this, Phaser.Physics.ARCADE);
-//     game.camera.follow(this);
-//   }
-// }
-
-/*
-
-initPlayer() {
-  ,
-      body: {
-        ...this.body,
-        bounce: {
-          ...this.body.bounce,
-          x: 0.2,
-          y: 0.2
-        },
-        collideWorldBounds: true
-      }
-} */
 
 export default class Player extends Phaser.Sprite {
   constructor({ x, y }) {

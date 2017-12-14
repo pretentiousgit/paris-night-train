@@ -2,8 +2,9 @@
 import Phaser, { Tilemap } from 'phaser';
 
 // function imports
-import Rectangle from '../sprites/Rectangle';
+import HealthBar from '../util/HealthBar';
 import Player1 from '../sprites/Player1';
+import Rectangle from '../sprites/Rectangle';
 
 import globals from '../config.globals';
 
@@ -33,7 +34,7 @@ export default class extends Phaser.State {
     const { collisionLayer } = globals;
     collisionLayer.resizeWorld();
     game.add.existing(collisionLayer);
-    globals.underLayer.add(collisionLayer);
+    globals.backgroundLayer.add(collisionLayer);
   }
 
   preload () {
@@ -44,7 +45,11 @@ export default class extends Phaser.State {
     const { game } = globals;
     globals.cursors = game.input.keyboard.createCursorKeys();
 
-    globals.underLayer = game.add.group();
+    globals.player = new Player1({ x: 75, y: 75 });
+    const { player } = globals;
+    globals.game.add.existing(player);
+
+    globals.backgroundLayer = game.add.group();
     globals.playerLayer = game.add.group();
     globals.abovePlayerLayer = game.add.group();
 
@@ -52,10 +57,9 @@ export default class extends Phaser.State {
 
     createCarriage();
 
-    globals.player = new Player1({ x: 50, y: 50 });
-
-    const { player } = globals;
-    globals.game.add.existing(player);
+    globals.playerLayer.add(globals.player);
+    globals.playerHealth = new HealthBar(game, { x: 150, y: 50, layer: globals.abovePlayerLayer });
+    globals.playerHealth.setFixedToCamera(true);
   }
 
   update() {

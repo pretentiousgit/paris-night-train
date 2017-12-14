@@ -14,7 +14,7 @@ function createDoorWall(x = 0, y = 20, width = 21, door = 7, doorPos = 7) {
     game,
     map,
     collisionLayer,
-    underLayer
+    backgroundLayer
   } = globals;
 
   const w = game.cache.getImage('player').width * 0.8;
@@ -24,7 +24,7 @@ function createDoorWall(x = 0, y = 20, width = 21, door = 7, doorPos = 7) {
   doorSprite.x = ((x + doorPos) * BLOCK_SIZE) + w;
   doorSprite.y = (y * BLOCK_SIZE);
 
-  underLayer.add(doorSprite);
+  backgroundLayer.add(doorSprite);
   game.physics.arcade.enable(doorSprite, Phaser.Physics.ARCADE);
   doorSprite.body.enable = true;
   doorSprite.body.immovable = true;
@@ -54,12 +54,16 @@ function createRoom(
 ) {
   const { map, collisionLayer } = globals;
 
+  console.log(worldWidth);
+  console.log('near wall', x);
+  console.log('width', width);
+  console.log('far wall', x + 20);
   // top wall
   row(x, y, width, collisionLayer, map);
 
   // column walls
-  column(x + width, 0, height, collisionLayer, map);
-  column(x, 0, height, collisionLayer, map);
+  column(x, 0, height, collisionLayer, map); // left
+  column(x + 15, 0, height, collisionLayer, map); // right
 
   // bottom wall with entrance hole
   createDoorWall(x, height, width, door, doorPos);
