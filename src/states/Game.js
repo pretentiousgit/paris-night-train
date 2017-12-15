@@ -2,8 +2,9 @@
 import Phaser, { Tilemap } from 'phaser';
 
 // function imports
-import Rectangle from '../sprites/Rectangle';
+
 import Player1 from '../sprites/Player1';
+import Enemy1 from '../sprites/Enemy1';
 
 import globals from '../config.globals';
 
@@ -54,8 +55,13 @@ export default class extends Phaser.State {
 
     globals.player = new Player1({ x: 50, y: 50 });
 
+    const stag = new Enemy1({ x: 250, y: 150, asset: 'stag' });
+    globals.playerLayer.add(globals.player);
+    globals.playerLayer.add(stag);
+
     const { player } = globals;
     globals.game.add.existing(player);
+    globals.game.add.existing(stag);
   }
 
   update() {

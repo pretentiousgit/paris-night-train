@@ -10,6 +10,7 @@ const manifest = {
     'couch',
     'door',
     'wall1',
+    'stag',
     'scifi_platformTiles_32x32'
   ],
   fonts: {
