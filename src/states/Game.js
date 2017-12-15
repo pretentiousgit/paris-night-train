@@ -5,6 +5,7 @@ import Phaser, { Tilemap } from 'phaser';
 
 import Player1 from '../sprites/Player1';
 import Enemy1 from '../sprites/Enemy1';
+import HealthBar from '../util/HealthBar';
 
 import globals from '../config.globals';
 
@@ -34,7 +35,7 @@ export default class extends Phaser.State {
     const { collisionLayer } = globals;
     collisionLayer.resizeWorld();
     game.add.existing(collisionLayer);
-    globals.underLayer.add(collisionLayer);
+    globals.backgroundLayer.add(collisionLayer);
   }
 
   preload () {
@@ -45,7 +46,11 @@ export default class extends Phaser.State {
     const { game } = globals;
     globals.cursors = game.input.keyboard.createCursorKeys();
 
-    globals.underLayer = game.add.group();
+    globals.player = new Player1({ x: 75, y: 75 });
+    const { player } = globals;
+    globals.game.add.existing(player);
+
+    globals.backgroundLayer = game.add.group();
     globals.playerLayer = game.add.group();
     globals.abovePlayerLayer = game.add.group();
 
@@ -53,20 +58,32 @@ export default class extends Phaser.State {
 
     createCarriage();
 
-    globals.player = new Player1({ x: 50, y: 50 });
-
     this.stag = new Enemy1({ x: 250, y: 150, asset: 'stag' });
-    globals.playerLayer.add(globals.player);
+    globals.playerLayer.add(player);
     globals.playerLayer.add(this.stag);
 
-    const { player } = globals;
+    // add the new instances to the game model
     globals.game.add.existing(player);
     globals.game.add.existing(this.stag);
+
+    globals.playerHealth = new HealthBar(game, {
+      x: 400,
+      y: 575,
+      layer: globals.abovePlayerLayer,
+      player: globals.player,
+      opacity: 60,
+      width: 600,
+      height: 20
+    });
+
+    globals.playerHealth.setFixedToCamera(true);
+    globals.playerHealth.setPercent(50);
   }
 
   update() {
     globals.player.update();
     this.stag.update();
+    globals.playerHealth.update();
   }
 
   render () {
