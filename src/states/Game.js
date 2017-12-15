@@ -56,12 +56,20 @@ export default class extends Phaser.State {
     this.initMap();
 
     createCarriage();
-
+    console.log();
     globals.playerLayer.add(globals.player);
     globals.playerHealth = new HealthBar(game, {
-      x: 150, y: 50, layer: globals.abovePlayerLayer, player: globals.player
+      x: 400,
+      y: 575,
+      layer: globals.abovePlayerLayer,
+      player: globals.player,
+      opacity: 60,
+      width: 600,
+      height: 20
     });
+
     globals.playerHealth.setFixedToCamera(true);
+    globals.playerHealth.setPercent(50);
   }
 
   update() {

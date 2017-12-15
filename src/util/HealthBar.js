@@ -73,6 +73,7 @@ function mergeWithDefaultConfiguration(newConfig) {
     bar: {
       color: '#FEFF03'
     },
+    opacity: 80,
     animationDuration: 200,
     flipped: false,
     isFixedToCamera: false
@@ -138,7 +139,7 @@ function setPosition(x, y) {
 }
 
 function setPercent(newPercentage) {
-  let p;
+  let p = newPercentage;
   if (newPercentage < 0) p = 0;
   if (newPercentage > 100) p = 100;
 
@@ -195,8 +196,8 @@ function update() {
     this.bgSprite.alpha = 0.5;
     this.barSprite.alpha = 0.5;
   } else {
-    this.bgSprite.alpha = 1;
-    this.barSprite.alpha = 1;
+    this.bgSprite.alpha = this.config.opacity;
+    this.barSprite.alpha = this.config.opacity;
   }
 }
 
