@@ -55,17 +55,18 @@ export default class extends Phaser.State {
 
     globals.player = new Player1({ x: 50, y: 50 });
 
-    const stag = new Enemy1({ x: 250, y: 150, asset: 'stag' });
+    this.stag = new Enemy1({ x: 250, y: 150, asset: 'stag' });
     globals.playerLayer.add(globals.player);
-    globals.playerLayer.add(stag);
+    globals.playerLayer.add(this.stag);
 
     const { player } = globals;
     globals.game.add.existing(player);
-    globals.game.add.existing(stag);
+    globals.game.add.existing(this.stag);
   }
 
   update() {
     globals.player.update();
+    this.stag.update();
   }
 
   render () {
