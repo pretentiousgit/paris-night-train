@@ -13,8 +13,7 @@ function createDoorWall(x = 0, y = 20, width = 21, door = 7, doorPos = 7) {
   const {
     game,
     map,
-    tileMapLayer,
-    backgroundLayer
+    tileMapLayer
   } = globals;
 
   const w = game.cache.getImage('player').width * 0.8;
@@ -23,11 +22,6 @@ function createDoorWall(x = 0, y = 20, width = 21, door = 7, doorPos = 7) {
   doorSprite.anchor.setTo(0, 0.75);
   doorSprite.x = ((x + doorPos) * BLOCK_SIZE) + w;
   doorSprite.y = (y * BLOCK_SIZE);
-
-  backgroundLayer.add(doorSprite);
-  game.physics.p2.enable(doorSprite);
-  doorSprite.body.enable = true;
-  doorSprite.body.immovable = true;
 
   const rows = {
     left: {

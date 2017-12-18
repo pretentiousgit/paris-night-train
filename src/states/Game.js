@@ -25,18 +25,6 @@ export default class extends Phaser.State {
 
   initMap () {
     const { game } = globals;
-    globals.map = game.add.tilemap();
-
-    const { map } = globals;
-    map.addTilesetImage('walls', 'scifi_platformTiles_32x32', BLOCK_SIZE, BLOCK_SIZE);
-    map.setCollisionBetween(1, 2000);
-
-    globals.tileMapLayer = map.create('level1', worldWidth, worldHeight, BLOCK_SIZE, BLOCK_SIZE);
-
-    const { tileMapLayer } = globals;
-    tileMapLayer.resizeWorld();
-    game.add.existing(tileMapLayer);
-    globals.backgroundLayer.add(tileMapLayer);
   }
 
   preload () {
@@ -52,14 +40,24 @@ export default class extends Phaser.State {
     this.game.physics.p2.setImpactEvents(true);
     this.game.physics.p2.restitution = 0.8;
 
+    globals.map = game.add.tilemap();
+
+    const { map } = globals;
+    map.addTilesetImage('walls', 'scifi_platformTiles_32x32', BLOCK_SIZE, BLOCK_SIZE);
+    map.setCollisionBetween(1, 2000);
+
+    globals.tileMapLayer = map.create('level1', worldWidth, worldHeight, BLOCK_SIZE, BLOCK_SIZE);
+
+    const { tileMapLayer } = globals;
+    tileMapLayer.resizeWorld();
+
     // //  Create our collision groups. One for the player, one for the pandas
     // const playerCollisionGroup = game.physics.p2.createCollisionGroup();
     // const enemyCollisionGroup = game.physics.p2.createCollisionGroup();
 
-    game.physics.p2.updateBoundsCollisionGroup();
-    game.physics.p2.setBoundsToWorld();
+    // game.physics.p2.updateBoundsCollisionGroup();
+    // game.physics.p2.setBoundsToWorld();
 
-    globals.backgroundLayer = game.add.group();
 
     this.stag = game.add.sprite(250, 150, 'stag');
     game.physics.p2.enable(this.stag, false);
@@ -74,7 +72,7 @@ export default class extends Phaser.State {
 
     // TODO: Pull player in here and see if we can get ANY collisions going
 
-    this.player = game.add.sprite(75, 75, 'player');
+    this.player = game.add.sprite(75, 110, 'player');
     game.physics.p2.enable(this.player, false);
     this.player.body.debug = true;
     this.player.body.clearShapes();
@@ -89,6 +87,8 @@ export default class extends Phaser.State {
     this.initMap();
 
     createCarriage();
+    game.physics.p2.convertTilemap(map, tileMapLayer);
+    game.physics.p2.setBoundsToWorld(true, true, true, true, false);
   }
 
   update() {
