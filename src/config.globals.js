@@ -4,7 +4,7 @@ export default {
   worldHeight: 30,
   worldWidth: 50,
   blockSize: 32,
-  collisionLayer: {},
+  tileMapLayer: {},
   map: {},
   player: {},
   cursors: {},

@@ -30,12 +30,13 @@ export default class extends Phaser.State {
     const { map } = globals;
     map.addTilesetImage('walls', 'scifi_platformTiles_32x32', BLOCK_SIZE, BLOCK_SIZE);
     map.setCollisionBetween(1, 2000);
-    globals.collisionLayer = map.create('level1', worldWidth, worldHeight, BLOCK_SIZE, BLOCK_SIZE);
 
-    const { collisionLayer } = globals;
-    collisionLayer.resizeWorld();
-    game.add.existing(collisionLayer);
-    globals.backgroundLayer.add(collisionLayer);
+    globals.tileMapLayer = map.create('level1', worldWidth, worldHeight, BLOCK_SIZE, BLOCK_SIZE);
+
+    const { tileMapLayer } = globals;
+    tileMapLayer.resizeWorld();
+    game.add.existing(tileMapLayer);
+    globals.backgroundLayer.add(tileMapLayer);
   }
 
   preload () {
@@ -46,44 +47,75 @@ export default class extends Phaser.State {
     const { game } = globals;
     globals.cursors = game.input.keyboard.createCursorKeys();
 
-    globals.player = new Player1({ x: 75, y: 75 });
-    const { player } = globals;
-    globals.game.add.existing(player);
+    this.game.physics.startSystem(Phaser.Physics.P2JS);
+    //  Turn on impact events for the world, without this we get no collision callbacks
+    this.game.physics.p2.setImpactEvents(true);
+    this.game.physics.p2.restitution = 0.8;
+
+    // //  Create our collision groups. One for the player, one for the pandas
+    // const playerCollisionGroup = game.physics.p2.createCollisionGroup();
+    // const enemyCollisionGroup = game.physics.p2.createCollisionGroup();
+
+    game.physics.p2.updateBoundsCollisionGroup();
+    game.physics.p2.setBoundsToWorld();
 
     globals.backgroundLayer = game.add.group();
-    globals.playerLayer = game.add.group();
-    globals.abovePlayerLayer = game.add.group();
+
+    this.stag = game.add.sprite(250, 150, 'stag');
+    game.physics.p2.enable(this.stag, false);
+    this.stag.body.clearShapes();
+    this.stag.body.loadPolygon('physicsData', 'stag');
+    // stag.body.setCollisionGroup(enemyCollisionGroup);
+    // stag.body.collides([
+    //   playerCollisionGroup,
+    //   enemyCollisionGroup], () => { console.log('collision fired'); });
+    this.stag.body.fixedRotation = true;
+    this.stag.body.debug = true;
+
+    // TODO: Pull player in here and see if we can get ANY collisions going
+
+    this.player = game.add.sprite(75, 75, 'player');
+    game.physics.p2.enable(this.player, false);
+    this.player.body.debug = true;
+    this.player.body.clearShapes();
+    this.player.body.loadPolygon('physicsData', 'player');
+    this.player.body.fixedRotation = true;
+
+    // this.player.body.setCollisionGroup(playerCollisionGroup);
+    // this.player.body.collides(enemyCollisionGroup, () => {
+    //   console.log('player collision');
+    // }, this);
 
     this.initMap();
 
     createCarriage();
-
-    this.stag = new Enemy1({ x: 250, y: 150, asset: 'stag' });
-    globals.playerLayer.add(player);
-    globals.playerLayer.add(this.stag);
-
-    // add the new instances to the game model
-    globals.game.add.existing(player);
-    globals.game.add.existing(this.stag);
-
-    globals.playerHealth = new HealthBar(game, {
-      x: 400,
-      y: 575,
-      layer: globals.abovePlayerLayer,
-      player: globals.player,
-      opacity: 60,
-      width: 600,
-      height: 20
-    });
-
-    globals.playerHealth.setFixedToCamera(true);
-    globals.playerHealth.setPercent(50);
   }
 
   update() {
-    globals.player.update();
-    this.stag.update();
-    globals.playerHealth.update();
+    const {
+      cursors, game
+    } = globals;
+
+    this.player.body.setZeroVelocity();
+    this.stag.body.setZeroVelocity();
+
+    if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+      console.log('interaction button clicked');
+      // set the player text bubble to visible
+      // there are two options, positive and negative?
+    }
+
+    if (cursors.left.isDown) {
+      this.player.body.moveLeft(250);
+    } else if (cursors.right.isDown) {
+      this.player.body.moveRight(250);
+    }
+
+    if (cursors.up.isDown) {
+      this.player.body.moveUp(250);
+    } else if (cursors.down.isDown) {
+      this.player.body.moveDown(250);
+    }
   }
 
   render () {

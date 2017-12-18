@@ -13,7 +13,7 @@ function createDoorWall(x = 0, y = 20, width = 21, door = 7, doorPos = 7) {
   const {
     game,
     map,
-    collisionLayer,
+    tileMapLayer,
     backgroundLayer
   } = globals;
 
@@ -25,7 +25,7 @@ function createDoorWall(x = 0, y = 20, width = 21, door = 7, doorPos = 7) {
   doorSprite.y = (y * BLOCK_SIZE);
 
   backgroundLayer.add(doorSprite);
-  game.physics.arcade.enable(doorSprite, Phaser.Physics.ARCADE);
+  game.physics.p2.enable(doorSprite);
   doorSprite.body.enable = true;
   doorSprite.body.immovable = true;
 
@@ -40,8 +40,8 @@ function createDoorWall(x = 0, y = 20, width = 21, door = 7, doorPos = 7) {
     }
   };
 
-  row(rows.left.x, y, rows.left.width, collisionLayer, map);
-  row(rows.right.x, y, rows.right.width, collisionLayer, map);
+  row(rows.left.x, y, rows.left.width, tileMapLayer, map);
+  row(rows.right.x, y, rows.right.width, tileMapLayer, map);
 }
 
 function createRoom(
@@ -52,18 +52,13 @@ function createRoom(
   door = 6,
   doorPos = (Math.floor((worldWidth / 3)) - 6) / 2
 ) {
-  const { map, collisionLayer } = globals;
-
-  console.log(worldWidth);
-  console.log('near wall', x);
-  console.log('width', width);
-  console.log('far wall', x + 20);
+  const { map, tileMapLayer } = globals;
   // top wall
-  row(x, y, width, collisionLayer, map);
+  row(x, y, width, tileMapLayer, map);
 
   // column walls
-  column(x, 0, height, collisionLayer, map); // left
-  column(x + 15, 0, height, collisionLayer, map); // right
+  column(x, 0, height, tileMapLayer, map); // left
+  column(x + 15, 0, height, tileMapLayer, map); // right
 
   // bottom wall with entrance hole
   createDoorWall(x, height, width, door, doorPos);
@@ -76,5 +71,5 @@ export default function createCarriage() {
   createRoom(0, 0);
   createRoom(thirds * 1, 0);
   createRoom(thirds * 2, 0);
-  row(0, worldHeight - 1, worldWidth, globals.collisionLayer, globals.map);
+  row(0, worldHeight - 1, worldWidth, globals.tileMapLayer, globals.map);
 }

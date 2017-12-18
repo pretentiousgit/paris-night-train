@@ -4,6 +4,7 @@ import Phaser from 'phaser';
 
 import BootState from './states/Boot';
 import GameState from './states/Game';
+import DemoState from './states/Demo';
 
 import globals from './config.globals';
 
@@ -13,6 +14,7 @@ class Game extends Phaser.Game {
 
     this.state.add('Boot', BootState, false);
     this.state.add('Game', GameState, false);
+    this.state.add('Demo', DemoState, false);
     globals.game = this;
 
     // when using cordova,
