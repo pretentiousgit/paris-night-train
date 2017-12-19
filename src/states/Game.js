@@ -3,9 +3,9 @@ import Phaser, { Tilemap } from 'phaser';
 
 // function imports
 
-import Player1 from '../sprites/Player1';
-import Enemy1 from '../sprites/Enemy1';
-import HealthBar from '../util/HealthBar';
+// import Player1 from '../sprites/Player1';
+// import Enemy1 from '../sprites/Enemy1';
+// import HealthBar from '../util/HealthBar';
 
 import globals from '../config.globals';
 
@@ -74,6 +74,7 @@ export default class extends Phaser.State {
 
     this.player = game.add.sprite(75, 110, 'player');
     game.physics.p2.enable(this.player, false);
+    game.camera.follow(this.player);
     this.player.body.debug = true;
     this.player.body.clearShapes();
     this.player.body.loadPolygon('physicsData', 'player');

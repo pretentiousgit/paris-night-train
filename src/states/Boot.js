@@ -8,8 +8,8 @@ const req = require.context('../assets', true, /.*\.png|json|ttf|woff|woff2|xml|
 
 export default class extends Phaser.State {
   init () {
-    // const scheme = kuler(272);
-    // this.stage.backgroundColor = scheme.mainShade;
+    const scheme = kuler(272);
+    this.stage.backgroundColor = scheme.mainShade;
   }
 
   preload () {
