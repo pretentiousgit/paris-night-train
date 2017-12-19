@@ -3,9 +3,9 @@ import Phaser, { Tilemap } from 'phaser';
 
 // function imports
 
-// import Player1 from '../sprites/Player1';
-// import Enemy1 from '../sprites/Enemy1';
-// import HealthBar from '../util/HealthBar';
+import Player1 from '../sprites/Player1';
+import Enemy1 from '../sprites/Enemy1';
+import HealthBar from '../util/HealthBar';
 
 import globals from '../config.globals';
 
@@ -59,31 +59,22 @@ export default class extends Phaser.State {
     // game.physics.p2.setBoundsToWorld();
 
 
-    this.stag = game.add.sprite(250, 150, 'stag');
-    game.physics.p2.enable(this.stag, false);
-    this.stag.body.clearShapes();
-    this.stag.body.loadPolygon('physicsData', 'stag');
     // stag.body.setCollisionGroup(enemyCollisionGroup);
     // stag.body.collides([
     //   playerCollisionGroup,
     //   enemyCollisionGroup], () => { console.log('collision fired'); });
-    this.stag.body.fixedRotation = true;
-    this.stag.body.debug = true;
 
     // TODO: Pull player in here and see if we can get ANY collisions going
 
-    this.player = game.add.sprite(75, 110, 'player');
-    game.physics.p2.enable(this.player, false);
-    game.camera.follow(this.player);
-    this.player.body.debug = true;
-    this.player.body.clearShapes();
-    this.player.body.loadPolygon('physicsData', 'player');
-    this.player.body.fixedRotation = true;
-
+    globals.player = new Player1({ x: 75, y: 120 });
+    globals.npc1 = new Enemy1({ x: 210, y: 120, asset: 'stag' });
     // this.player.body.setCollisionGroup(playerCollisionGroup);
     // this.player.body.collides(enemyCollisionGroup, () => {
     //   console.log('player collision');
     // }, this);
+
+    game.add.existing(globals.player);
+    game.add.existing(globals.npc1);
 
     this.initMap();
 
@@ -93,30 +84,8 @@ export default class extends Phaser.State {
   }
 
   update() {
-    const {
-      cursors, game
-    } = globals;
-
-    this.player.body.setZeroVelocity();
-    this.stag.body.setZeroVelocity();
-
-    if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-      console.log('interaction button clicked');
-      // set the player text bubble to visible
-      // there are two options, positive and negative?
-    }
-
-    if (cursors.left.isDown) {
-      this.player.body.moveLeft(250);
-    } else if (cursors.right.isDown) {
-      this.player.body.moveRight(250);
-    }
-
-    if (cursors.up.isDown) {
-      this.player.body.moveUp(250);
-    } else if (cursors.down.isDown) {
-      this.player.body.moveDown(250);
-    }
+    globals.player.update();
+    globals.npc1.update();
   }
 
   render () {
