@@ -50,6 +50,8 @@
         "phaser-manifest-loader": "^3.0.0",
         "phaser-webpack-loader": "^1.0.2",
         "redux": "^3.7.2",
+        "redux-devtools-extension": "^2.13.2",
+        "redux-logger": "^3.0.6",
         "url-loader": "^0.6.2",
         "webfontloader": "^1.6.28"
     },
