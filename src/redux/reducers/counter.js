@@ -1,4 +1,4 @@
-import { createStore } from 'redux';
+
 
 /**
  * This is a reducer, a pure function with (state, action) => state signature.
@@ -23,9 +23,3 @@ function counter(state = 0, action) {
     return state;
   }
 }
-
-// Create a Redux store holding the state of your app.
-// Its API is { subscribe, dispatch, getState }.
-const store = createStore(counter);
-
-export default createStore(counter);
