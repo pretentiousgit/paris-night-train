@@ -1,8 +1,8 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import createLogger from 'redux-logger';
+import { createLogger } from 'redux-logger';
 import { composeWithDevTools } from 'redux-devtools-extension'; // PROD: 'redux-devtools-extension/logOnlyInProduction'
 
-import counter from './reducers/counter';
+import player from './reducers/player';
 
 // Dev tooling
 const logger = createLogger();
@@ -11,7 +11,7 @@ const composeEnhancers = composeWithDevTools({
 });
 
 const reducer = combineReducers({
-  counter
+  player
 });
 
 const middleware = composeEnhancers(applyMiddleware(logger));

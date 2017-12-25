@@ -11,7 +11,7 @@ import globals from '../config.globals';
 
 import createCarriage from '../generators/createRoom';
 
-import store from '../reducers/mainReducer';
+import store from '../redux/store';
 // You can use subscribe() to update the UI in response to state changes.
 // Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
 // However it can also be handy to persist the current state in the localStorage.
