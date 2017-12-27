@@ -33,6 +33,17 @@ export default class extends Phaser.State {
 
   initMap () {
     const { game } = globals;
+    globals.map = game.add.tilemap();
+
+    const { map } = globals;
+    map.addTilesetImage('walls', 'scifi_platformTiles_32x32', BLOCK_SIZE, BLOCK_SIZE);
+    map.setCollisionBetween(1, 2000);
+
+    globals.tileMapLayer = map.create('level1', worldWidth, worldHeight, BLOCK_SIZE, BLOCK_SIZE);
+
+    const { tileMapLayer } = globals;
+    tileMapLayer.resizeWorld();
+    game.physics.p2.convertTilemap(map, tileMapLayer);
   }
 
   preload () {
@@ -51,46 +62,36 @@ export default class extends Phaser.State {
     this.game.physics.p2.setImpactEvents(true);
     this.game.physics.p2.restitution = 0.8;
 
-    globals.map = game.add.tilemap();
+    globals.backgroundLayer = game.add.group();
+    globals.playLayer = game.add.group();
+    globals.uiLayer = game.add.group();
 
-    const { map } = globals;
-    map.addTilesetImage('walls', 'scifi_platformTiles_32x32', BLOCK_SIZE, BLOCK_SIZE);
-    map.setCollisionBetween(1, 2000);
-
-    globals.tileMapLayer = map.create('level1', worldWidth, worldHeight, BLOCK_SIZE, BLOCK_SIZE);
-
-    const { tileMapLayer } = globals;
-    tileMapLayer.resizeWorld();
-
-    // //  Create our collision groups. One for the player, one for the pandas
-    // const playerCollisionGroup = game.physics.p2.createCollisionGroup();
-    // const enemyCollisionGroup = game.physics.p2.createCollisionGroup();
-
-    // game.physics.p2.updateBoundsCollisionGroup();
-    // game.physics.p2.setBoundsToWorld();
-
-
-    // stag.body.setCollisionGroup(enemyCollisionGroup);
-    // stag.body.collides([
-    //   playerCollisionGroup,
-    //   enemyCollisionGroup], () => { console.log('collision fired'); });
-
-    // TODO: Pull player in here and see if we can get ANY collisions going
+    this.initMap();
 
     globals.player = new Player1({ x: 75, y: 120 });
     globals.npc1 = new Enemy1({ x: 210, y: 120, asset: 'stag' });
-    // this.player.body.setCollisionGroup(playerCollisionGroup);
-    // this.player.body.collides(enemyCollisionGroup, () => {
-    //   console.log('player collision');
-    // }, this);
+    globals.healthBar = new HealthBar(game, {
+      layer: globals.uiLayer,
+      width: game.width - 150,
+      height: 10,
+      x: 75,
+      y: game.height - 25,
+      bg: {
+        color: '#651828'
+      },
+      bar: {
+        color: '#FEFF03'
+      },
+      opacity: 80,
+      animationDuration: 200,
+      flipped: false,
+      isFixedToCamera: true
+    });
 
     game.add.existing(globals.player);
     game.add.existing(globals.npc1);
 
-    this.initMap();
-
     createCarriage();
-    game.physics.p2.convertTilemap(map, tileMapLayer);
     game.physics.p2.setBoundsToWorld(true, true, true, true, false);
   }
 
