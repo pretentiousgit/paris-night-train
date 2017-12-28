@@ -38,7 +38,6 @@ export default class extends Phaser.State {
     const { map } = globals;
     map.addTilesetImage('walls', 'scifi_platformTiles_32x32', BLOCK_SIZE, BLOCK_SIZE);
     map.setCollisionBetween(1, 2000);
-
     globals.tileMapLayer = map.create('level1', worldWidth, worldHeight, BLOCK_SIZE, BLOCK_SIZE);
 
     const { tileMapLayer } = globals;
@@ -74,7 +73,7 @@ export default class extends Phaser.State {
       layer: globals.uiLayer,
       width: game.width - 150,
       height: 10,
-      x: 75,
+      x: game.width / 2,
       y: game.height - 25,
       bg: {
         color: '#651828'
@@ -90,6 +89,7 @@ export default class extends Phaser.State {
 
     game.add.existing(globals.player);
     game.add.existing(globals.npc1);
+
 
     createCarriage();
     game.physics.p2.setBoundsToWorld(true, true, true, true, false);

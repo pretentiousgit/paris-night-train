@@ -13,7 +13,8 @@ function createDoorWall(x = 0, y = 20, width = 21, door = 7, doorPos = 7) {
   const {
     game,
     map,
-    tileMapLayer
+    tileMapLayer,
+    backgroundLayer
   } = globals;
 
   const w = game.cache.getImage('player').width * 0.8;
@@ -22,6 +23,7 @@ function createDoorWall(x = 0, y = 20, width = 21, door = 7, doorPos = 7) {
   doorSprite.anchor.setTo(0, 0.75);
   doorSprite.x = ((x + doorPos) * BLOCK_SIZE) + w;
   doorSprite.y = (y * BLOCK_SIZE);
+  backgroundLayer.add(doorSprite);
 
   const rows = {
     left: {
@@ -34,8 +36,8 @@ function createDoorWall(x = 0, y = 20, width = 21, door = 7, doorPos = 7) {
     }
   };
 
-  row(rows.left.x, y, rows.left.width, tileMapLayer, map);
-  row(rows.right.x, y, rows.right.width, tileMapLayer, map);
+  row(rows.left.x, y, rows.left.width, tileMapLayer, map, backgroundLayer);
+  row(rows.right.x, y, rows.right.width, tileMapLayer, map, backgroundLayer);
 }
 
 function createRoom(
