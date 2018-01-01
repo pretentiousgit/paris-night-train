@@ -26,8 +26,8 @@ const {
 
 
 function particleBurst(pointer) {
-  globals.emitter.x = pointer.x;
-  globals.emitter.y = pointer.y;
+  globals.emitter.x = globals.player.x;
+  globals.emitter.y = globals.player.y;
 
   //  The first parameter sets the effect to "explode" which means all particles are emitted at once
   //  The second gives each particle a 2000ms lifespan
@@ -105,10 +105,11 @@ export default class extends Phaser.State {
     game.physics.p2.setBoundsToWorld(true, true, true, true, false);
 
 
-    globals.emitter = globals.game.add.emitter(0, 0, 100);
+    globals.emitter = globals.game.add.emitter(globals.player.x, globals.player.y, 100);
     globals.emitter.makeParticles('mushroom');
     globals.emitter.gravity = 200;
-    game.input.onDown.add(particleBurst, this);
+    globals.actionKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    globals.actionKey.onDown.add(particleBurst, this);
   }
 
   update() {
