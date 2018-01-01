@@ -9,8 +9,9 @@ import HealthBar from '../util/HealthBar';
 import globals from '../config.globals';
 
 import createCarriage from '../generators/createRoom';
-
 import store from '../redux/store';
+
+import { particleBurst } from '../util/sparkle';
 // You can use subscribe() to update the UI in response to state changes.
 // Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
 // However it can also be handy to persist the current state in the localStorage.
@@ -24,22 +25,22 @@ const {
   worldWidth
 } = globals;
 
-
-function particleBurst(pointer) {
-  globals.emitter.x = globals.player.x;
-  globals.emitter.y = globals.player.y;
-
-  //  The first parameter sets the effect to "explode" which means all particles are emitted at once
-  //  The second gives each particle a 2000ms lifespan
-  //  The third is ignored when using burst/explode mode
-  //  The final parameter (10) is how many particles will be emitted in this single burst
-  globals.emitter.start(true, 2000, null, 10);
-}
-
 export default class extends Phaser.State {
   constructor(game) {
     super(game, 0, 0);
     globals.game = game;
+  }
+
+  particleBurst(pointer) {
+    console.log('blam');
+    globals.emitter.x = globals.player.x;
+    globals.emitter.y = globals.player.y;
+
+    //  The first parameter sets the effect to "explode" which means all particles are emitted at once
+    //  The second gives each particle a 2000ms lifespan
+    //  The third is ignored when using burst/explode mode
+    //  The final parameter (10) is how many particles will be emitted in this single burst
+    globals.emitter.start(true, 2000, null, 10);
   }
 
   initMap () {
@@ -104,12 +105,12 @@ export default class extends Phaser.State {
     createCarriage();
     game.physics.p2.setBoundsToWorld(true, true, true, true, false);
 
-
     globals.emitter = globals.game.add.emitter(globals.player.x, globals.player.y, 100);
     globals.emitter.makeParticles('mushroom');
     globals.emitter.gravity = 200;
+
     globals.actionKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    globals.actionKey.onDown.add(particleBurst, this);
+    globals.actionKey.onDown.add(this.particleBurst, this);
   }
 
   update() {

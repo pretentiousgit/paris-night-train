@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import globals from '../config.globals';
 import { range } from '../util/utilities';
 import descriptorList from '../util/descriptorList';
-// import { particleBurst } from '../util/sparkle';
+import { particleBurst } from '../util/sparkle';
 
 export default class Player extends Phaser.Sprite {
   constructor({ x, y }) {
@@ -20,7 +20,8 @@ export default class Player extends Phaser.Sprite {
     this.body.clearShapes();
     this.body.loadPolygon('physicsData', 'player');
     this.body.fixedRotation = true;
-
+    //  Check for the block hitting another object
+    this.body.onBeginContact.add(this.particleBurst, this);
 
     // a character has some preferences
     // like they enjoy coffee or tilework or cafes or reading or parties or nightclubs
@@ -35,6 +36,18 @@ export default class Player extends Phaser.Sprite {
     // The button press coughs up an "interaction" bubble where you ask for snacks or the bathroom or
     // and you interact with them using a ping-pong controller - if you NAIL IT that becomes a thing
     // your character likes better?
+  }
+
+  particleBurst(pointer) {
+    console.log('blam');
+    globals.emitter.x = globals.player.x;
+    globals.emitter.y = globals.player.y;
+
+    //  The first parameter sets the effect to "explode" which means all particles are emitted at once
+    //  The second gives each particle a 2000ms lifespan
+    //  The third is ignored when using burst/explode mode
+    //  The final parameter (10) is how many particles will be emitted in this single burst
+    globals.emitter.start(true, 2000, null, 10);
   }
 
   update() {
