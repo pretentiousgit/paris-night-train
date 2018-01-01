@@ -2,7 +2,6 @@
 import Phaser, { Tilemap } from 'phaser';
 
 // function imports
-
 import Player1 from '../sprites/Player1';
 import Enemy1 from '../sprites/Enemy1';
 import HealthBar from '../util/HealthBar';
@@ -24,6 +23,18 @@ const {
   worldHeight,
   worldWidth
 } = globals;
+
+
+function particleBurst(pointer) {
+  globals.emitter.x = pointer.x;
+  globals.emitter.y = pointer.y;
+
+  //  The first parameter sets the effect to "explode" which means all particles are emitted at once
+  //  The second gives each particle a 2000ms lifespan
+  //  The third is ignored when using burst/explode mode
+  //  The final parameter (10) is how many particles will be emitted in this single burst
+  globals.emitter.start(true, 2000, null, 10);
+}
 
 export default class extends Phaser.State {
   constructor(game) {
@@ -90,9 +101,14 @@ export default class extends Phaser.State {
     game.add.existing(globals.player);
     game.add.existing(globals.npc1);
 
-
     createCarriage();
     game.physics.p2.setBoundsToWorld(true, true, true, true, false);
+
+
+    globals.emitter = globals.game.add.emitter(0, 0, 100);
+    globals.emitter.makeParticles('mushroom');
+    globals.emitter.gravity = 200;
+    game.input.onDown.add(particleBurst, this);
   }
 
   update() {
