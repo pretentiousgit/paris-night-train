@@ -68,4 +68,13 @@ export default function createCarriage() {
   createRoom(thirds * 1, 0);
   createRoom(thirds * 2, 0);
   row(0, worldHeight - 1, worldWidth, globals.tileMapLayer, globals.map);
+  globals.map.setCollisionBetween(1, 2000);
+  globals.tileMapLayer.resizeWorld();
+  const tiles = globals.game.physics.p2.convertTilemap(globals.map, globals.tileMapLayer);
+
+  for (let i = 0; i < tiles.length; i += 1) {
+    const tileBody = tiles[i];
+    tileBody.setCollisionGroup(globals.wallCollisionGroup);
+    tileBody.collides(globals.playerCollisionGroup);
+  }
 }

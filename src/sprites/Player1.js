@@ -20,8 +20,14 @@ export default class Player extends Phaser.Sprite {
     this.body.clearShapes();
     this.body.loadPolygon('physicsData', 'player');
     this.body.fixedRotation = true;
-    //  Check for the block hitting another object
-    this.body.onBeginContact.add(this.particleBurst, this);
+
+    // set up player collision groups
+    this.body.setCollisionGroup(globals.playerCollisionGroup);
+
+    //  Check for the block hitting an NPC
+    this.body.collides(globals.npcCollisionGroup, this.particleBurst, this);
+    this.body.collides(globals.wallCollisionGroup, () => { console.log('hello wall'); }, this);
+    // this.body.onBeginContact.add(this.particleBurst, this);
 
     // a character has some preferences
     // like they enjoy coffee or tilework or cafes or reading or parties or nightclubs

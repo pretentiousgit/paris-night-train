@@ -12,10 +12,11 @@ export default class Enemy extends Phaser.Sprite {
     this.body.fixedRotation = true;
     this.body.debug = true;
 
-    // stag.body.setCollisionGroup(enemyCollisionGroup);
-    // stag.body.collides([
-    //   playerCollisionGroup,
-    //   enemyCollisionGroup], () => { console.log('collision fired'); });
+    this.body.setCollisionGroup(globals.npcCollisionGroup);
+    this.body.collides([
+      globals.playerCollisionGroup,
+      globals.npcCollisionGroup
+    ], () => { console.log('collision fired'); });
   }
 
   update() {

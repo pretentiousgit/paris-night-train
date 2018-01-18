@@ -73,6 +73,12 @@ export default class extends Phaser.State {
     this.game.physics.p2.setImpactEvents(true);
     this.game.physics.p2.restitution = 0.8;
 
+    // Turn on collision groups
+    globals.wallCollisionGroup = game.physics.p2.createCollisionGroup();
+    globals.npcCollisionGroup = game.physics.p2.createCollisionGroup();
+    globals.playerCollisionGroup = game.physics.p2.createCollisionGroup();
+    game.physics.p2.updateBoundsCollisionGroup();
+
     globals.backgroundLayer = game.add.group();
     globals.playLayer = game.add.group();
     globals.uiLayer = game.add.group();
