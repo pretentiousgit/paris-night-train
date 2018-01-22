@@ -8,7 +8,11 @@ export default class Player extends Phaser.Sprite {
   constructor({ x, y }) {
     const { game } = globals;
     console.log('player x y', x, y);
-    super(game, x, y, 'player');
+
+    super(game, x, y, 'player', 1);
+    this.scale.setTo(0.3, 0.3);
+    this.anchor.setTo(0.5, 0.5);
+
     game.camera.follow(this);
     this.smoothed = true;
 
@@ -17,8 +21,15 @@ export default class Player extends Phaser.Sprite {
 
     game.physics.p2.enable(this, false);
     this.body.debug = true;
+
+    this.animations.add('walk', [2, 3]);
+    this.animations.add('point', [7, 8, 7]);
+    this.animations.add('idle', [1]);
+
+    this.animations.play('idle', 6, true);
+
     this.body.clearShapes();
-    this.body.loadPolygon('physicsData', 'player');
+    this.body.setRectangle(Math.abs(this.width), Math.abs(this.height));
     this.body.fixedRotation = true;
 
     // set up player collision groups
@@ -27,7 +38,6 @@ export default class Player extends Phaser.Sprite {
     //  Check for the block hitting an NPC
     this.body.collides(globals.npcCollisionGroup, this.particleBurst, this);
     this.body.collides(globals.wallCollisionGroup, () => { console.log('hello wall'); }, this);
-    // this.body.onBeginContact.add(this.particleBurst, this);
 
     // a character has some preferences
     // like they enjoy coffee or tilework or cafes or reading or parties or nightclubs
@@ -62,17 +72,23 @@ export default class Player extends Phaser.Sprite {
     } = globals;
 
     this.body.setZeroVelocity();
+    // this.animations.play('idle', 0, true);
 
     if (cursors.left.isDown) {
+      this.scale.x *= -1;
+      this.animations.play('walk', 6, false);
       this.body.moveLeft(250);
     } else if (cursors.right.isDown) {
+      this.animations.play('walk', 6, false);
       this.body.moveRight(250);
-    }
-
-    if (cursors.up.isDown) {
+    } else if (cursors.up.isDown) {
       this.body.moveUp(250);
+      this.animations.play('walk', 6, false);
     } else if (cursors.down.isDown) {
       this.body.moveDown(250);
+      this.animations.play('walk', 6, false);
+    } else {
+      this.animations.play('idle');
     }
   }
 }

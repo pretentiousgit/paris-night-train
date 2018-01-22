@@ -1,10 +1,10 @@
 const manifest = {
   spritesheets: [
+    'player'
   ],
   bitmap_fonts: [],
   audio: [],
   images: [
-    'player',
     'mushroom',
     'loader-bg',
     'couch',
