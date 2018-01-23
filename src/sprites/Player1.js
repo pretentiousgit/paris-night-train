@@ -22,9 +22,13 @@ export default class Player extends Phaser.Sprite {
     game.physics.p2.enable(this, false);
     this.body.debug = true;
 
-    this.animations.add('walk', [2, 3]);
-    this.animations.add('point', [7, 8, 7]);
-    this.animations.add('idle', [1]);
+    this.animations.add('walkR', [1, 2]);
+    this.animations.add('walk', [6, 7]);
+    this.animations.add('pointR', [0, 11, 0]);
+    this.animations.add('pointL', [8, 6, 8]);
+    this.animations.add('pointUpL', [9, 10, 9]);
+    this.animations.add('pointUpR', [3, 4, 3]);
+    this.animations.add('idle', [0]);
 
     this.animations.play('idle', 6, true);
 
@@ -37,7 +41,7 @@ export default class Player extends Phaser.Sprite {
 
     //  Check for the block hitting an NPC
     this.body.collides(globals.npcCollisionGroup, this.particleBurst, this);
-    this.body.collides(globals.wallCollisionGroup, () => { console.log('hello wall'); }, this);
+    this.body.collides(globals.wallCollisionGroup, () => {}, this);
 
     // a character has some preferences
     // like they enjoy coffee or tilework or cafes or reading or parties or nightclubs
@@ -72,14 +76,16 @@ export default class Player extends Phaser.Sprite {
     } = globals;
 
     this.body.setZeroVelocity();
-    // this.animations.play('idle', 0, true);
 
+    // interaction key animation
+    globals.actionKey.onDown.add(this.particleBurst, this);
+
+    // walking/interaction animation
     if (cursors.left.isDown) {
-      this.scale.x *= -1;
       this.animations.play('walk', 6, false);
       this.body.moveLeft(250);
     } else if (cursors.right.isDown) {
-      this.animations.play('walk', 6, false);
+      this.animations.play('walkR', 6, false);
       this.body.moveRight(250);
     } else if (cursors.up.isDown) {
       this.body.moveUp(250);

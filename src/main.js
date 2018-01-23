@@ -10,7 +10,7 @@ import globals from './config.globals';
 
 class Game extends Phaser.Game {
   constructor () {
-    super(globals.gameWidth, globals.gameHeight, Phaser.AUTO, 'content', null);
+    super(globals.gameWidth, globals.gameHeight, Phaser.AUTO, 'phaser-container', null);
 
     this.state.add('Boot', BootState, false);
     this.state.add('Game', GameState, false);
@@ -53,3 +53,5 @@ if (window.cordova) {
 
   app.initialize();
 }
+
+export default Game;
