@@ -140,17 +140,16 @@ export default class extends Phaser.State {
           display: false
         },
         scale: {
-          // display: false
-        },
-        axes: {
-          afterTickToLabelConversion(data) {
-            const xLabels = data.ticks;
-
-            xLabels.forEach((labels, i) => {
-              if (i % 2 == 1) {
-                xLabels[i] = '';
-              }
-            });
+          ticks: {
+            display: false,
+            backdropColor: 'rgba(0,0,0,0)',
+            beginAtZero: true,
+            min: 0,
+            max: 100,
+            stepSize: 20
+          },
+          pointLabels: {
+            fontSize: 18
           }
         },
         tooltips: {
