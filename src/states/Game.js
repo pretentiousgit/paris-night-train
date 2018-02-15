@@ -12,12 +12,15 @@ import createCarriage from '../generators/createRoom';
 import store from '../redux/store';
 
 import { particleBurst } from '../util/sparkle';
+import { statsFactory } from '../generators/statsFactory';
+
 // You can use subscribe() to update the UI in response to state changes.
 // Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
 // However it can also be handy to persist the current state in the localStorage.
 
 // The only way to mutate the internal state is to dispatch an action.
 // The actions can be serialized, logged or stored and later replayed.
+
 
 Chart.pluginService.register({
   beforeDraw(chart, easing) {
@@ -119,19 +122,11 @@ export default class extends Phaser.State {
     const chartCtx = document.getElementById('health-bar');
     // chartCtx.style.backgroundColor = 'rgba(255,0,0,255)';
 
+    // todo: Replace the below chartInit with the new StatsFactory.
+
     globals.healthChart = new Chart(chartCtx, {
       type: 'radar',
-      data: {
-        labels: ['Running', 'Swimming', 'Eating', 'Cycling'],
-        datasets: [{
-          label: 'Emotional State',
-          data: [20, 10, 4, 2],
-          backgroundColor: 'rgba(0, 0, 255, 0.4)',
-          borderColor: 'rgba(0, 0, 255, 0.4)',
-          pointBackgroundColor: 'rgba(0, 0, 255, 0.7)',
-          pointBorderColor: 'rgba(0, 0, 255, 0.5)'
-        }]
-      },
+      data: statsFactory(),
       options: {
         responsive: false,
         maintainAspectRatio: true,
@@ -145,8 +140,8 @@ export default class extends Phaser.State {
             backdropColor: 'rgba(0,0,0,0)',
             beginAtZero: true,
             min: 0,
-            max: 100,
-            stepSize: 20
+            max: 10,
+            stepSize: 1
           },
           pointLabels: {
             fontSize: 18

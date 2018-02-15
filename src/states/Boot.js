@@ -3,13 +3,14 @@ import { AssetLoader } from 'phaser-manifest-loader';
 
 import manifest from '../config.assetManifest';
 import kuler from '../util/kuler';
+import globals from '../config.globals';
 
 const req = require.context('../assets', true, /.*\.png|json|ttf|woff|woff2|xml|mp3|jpg$/);
 
 export default class extends Phaser.State {
   init () {
-    const scheme = kuler(272);
-    this.stage.backgroundColor = scheme.mainShade;
+    globals.scheme = kuler(272);
+    this.stage.backgroundColor = globals.scheme.mainShade;
   }
 
   preload () {
@@ -21,6 +22,5 @@ export default class extends Phaser.State {
   }
 
   render () {
-
   }
 }
