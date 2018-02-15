@@ -47,26 +47,35 @@ function statsFactory() {
   const numberOfAxes = range(globals.difficulty[0]); // start off at difficulty 0, TODO: hook to higher difficulty
 
   const labels = labelSelect(numberOfAxes);
+  const optimalSetData = numberOfAxes.map(() => getRandomIntInclusive(5, 10));
+  const playerSetData = numberOfAxes.map(() => getRandomIntInclusive(1, 5));
 
   globals.labels = labels; // pass over to player.labels ?
-
-  const optimalSetData = numberOfAxes.map(() => getRandomIntInclusive(4, 10));
-
-  console.log('generated labels', labels);
 
   const optimalSet = {
     label: 'best you',
     data: optimalSetData,
+    backgroundColor: globals.scheme.mainPale.replace(',1)', ',0.4'),
+    borderColor: globals.scheme.mainShade,
+    pointBackgroundColor: globals.scheme.mainShade,
+    pointBorderColor: globals.scheme.mainShade
+  };
+
+  const playerSet = {
+    label: 'you',
+    data: playerSetData,
     backgroundColor: globals.scheme.contrast.replace(',1)', ',0.6'),
     borderColor: globals.scheme.contrast,
     pointBackgroundColor: globals.scheme.contrast,
     pointBorderColor: globals.scheme.contrast
+
   };
 
   return {
     labels,
     datasets: [
-      optimalSet
+      optimalSet,
+      playerSet
     ]
   };
 }

@@ -11,6 +11,7 @@ export default class extends Phaser.State {
   init () {
     globals.scheme = kuler(272);
     this.stage.backgroundColor = globals.scheme.mainShade;
+    console.log('boot color scheme', globals.scheme);
   }
 
   preload () {

@@ -16,9 +16,6 @@ export default class Player extends Phaser.Sprite {
     game.camera.follow(this);
     this.smoothed = true;
 
-    this.health = 24;
-    this.maxHealth = 50;
-
     game.physics.p2.enable(this, false);
     this.body.debug = true;
 
