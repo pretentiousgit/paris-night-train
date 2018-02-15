@@ -56,9 +56,9 @@ function statsFactory() {
     label: 'best you',
     data: optimalSetData,
     backgroundColor: globals.scheme.mainPale.replace(',1)', ',0.4'),
-    borderColor: globals.scheme.mainShade,
-    pointBackgroundColor: globals.scheme.mainShade,
-    pointBorderColor: globals.scheme.mainShade
+    borderColor: globals.scheme.mainRich,
+    pointBackgroundColor: globals.scheme.mainRich,
+    pointBorderColor: globals.scheme.mainRich
   };
 
   const playerSet = {
@@ -80,7 +80,39 @@ function statsFactory() {
   };
 }
 
-export { statsFactory };
+const initChart = () => ({
+  type: 'radar',
+  data: statsFactory(),
+  options: {
+    responsive: false,
+    maintainAspectRatio: true,
+    legend: {
+      display: false
+    },
+    scale: {
+      ticks: {
+        display: false,
+        backdropColor: 'rgba(0,0,0,0)',
+        beginAtZero: true,
+        min: 0,
+        max: 10,
+        stepSize: 1
+      },
+      pointLabels: {
+        fontSize: 18
+      }
+    },
+    tooltips: {
+      callbacks: {
+        label(tooltipItem) {
+          return tooltipItem.yLabel;
+        }
+      }
+    }
+  }
+});
+
+export { initChart };
 
 /*
   data: {

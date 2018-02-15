@@ -6,7 +6,7 @@ export default {
   worldHeight: 30,
   worldWidth: 60,
   blockSize: 32,
-  difficulty: [4, 5, 6],
+  difficulty: [4, 5, 6, 7],
   tileMapLayer: {},
   map: {},
   player: {},

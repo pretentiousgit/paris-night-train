@@ -15,10 +15,18 @@ function particleBurst() {
   //  The second gives each particle a 2000ms lifespan
   //  The third is ignored when using burst/explode mode
   //  The final parameter (10) is how many particles will be emitted in this single burst
-  globals.emitter.start(true, 2000, null, 10);
+  globals.emitter.start(true, 500, null, 10);
+
+  // enable particle animation of all particles
+  globals.emitter.forEach((singleParticle) => {
+    singleParticle.animations.add('particleAnim');
+    singleParticle.animations.play('particleAnim', 30, true);
+  });
+
+  globals.game.camera.shake(0.003, 150);
 }
 
-export default {
+export {
   initEmitter,
   particleBurst
 };

@@ -11,8 +11,7 @@ import globals from '../config.globals';
 import createCarriage from '../generators/createRoom';
 import store from '../redux/store';
 
-import { particleBurst } from '../util/sparkle';
-import { statsFactory } from '../generators/statsFactory';
+import { initChart } from '../generators/statsFactory';
 
 // You can use subscribe() to update the UI in response to state changes.
 // Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
@@ -90,7 +89,13 @@ export default class extends Phaser.State {
     this.game.physics.startSystem(Phaser.Physics.P2JS);
     //  Turn on impact events for the world, without this we get no collision callbacks
     this.game.physics.p2.setImpactEvents(true);
-    this.game.physics.p2.restitution = 0.8;
+
+    globals.npcMaterial = game.physics.p2.createMaterial('npcMaterial');
+    globals.playerMaterial = game.physics.p2.createMaterial('playerMaterial');
+    globals.worldMaterial = game.physics.p2.createMaterial('worldMaterial');
+
+    //  4 trues = the 4 faces of the world in left, right, top, bottom order
+    game.physics.p2.setWorldMaterial(globals.worldMaterial, true, true, true, true);
 
     // Turn on collision groups
     globals.wallCollisionGroup = game.physics.p2.createCollisionGroup();
@@ -119,43 +124,7 @@ export default class extends Phaser.State {
     globals.emitter.gravity = 200;
 
     // global health chart
-    const chartCtx = document.getElementById('health-bar');
-    // chartCtx.style.backgroundColor = 'rgba(255,0,0,255)';
-
-    // todo: Replace the below chartInit with the new StatsFactory.
-
-    globals.healthChart = new Chart(chartCtx, {
-      type: 'radar',
-      data: statsFactory(),
-      options: {
-        responsive: false,
-        maintainAspectRatio: true,
-        // backgroundColor: 'rgba(255,255,255,0.5)',
-        legend: {
-          display: false
-        },
-        scale: {
-          ticks: {
-            display: false,
-            backdropColor: 'rgba(0,0,0,0)',
-            beginAtZero: true,
-            min: 0,
-            max: 10,
-            stepSize: 1
-          },
-          pointLabels: {
-            fontSize: 18
-          }
-        },
-        tooltips: {
-          callbacks: {
-            label(tooltipItem) {
-              return tooltipItem.yLabel;
-            }
-          }
-        }
-      }
-    });
+    globals.healthChart = new Chart(document.getElementById('health-bar'), initChart());
   }
 
   update() {

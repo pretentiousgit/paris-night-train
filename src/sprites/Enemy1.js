@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import globals from '../config.globals';
+import { particleBurst } from '../util/sparkle';
 
 export default class Enemy extends Phaser.Sprite {
   constructor({ x, y, asset }) {
@@ -10,13 +11,16 @@ export default class Enemy extends Phaser.Sprite {
     this.body.clearShapes();
     this.body.loadPolygon('physicsData', 'stag');
     this.body.fixedRotation = true;
-    this.body.debug = true;
+    // this.body.debug = true;
+
+    game.physics.p2.setMaterial(globals.npcMaterial, this.body);
 
     this.body.setCollisionGroup(globals.npcCollisionGroup);
+
     this.body.collides([
       globals.playerCollisionGroup,
       globals.npcCollisionGroup
-    ], () => { console.log('collision fired'); });
+    ], () => { particleBurst(); });
   }
 
   update() {

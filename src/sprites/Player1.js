@@ -1,8 +1,5 @@
 import Phaser from 'phaser';
 import globals from '../config.globals';
-import { range } from '../util/utilities';
-import descriptorList from '../util/descriptorList';
-import { particleBurst } from '../util/sparkle';
 
 export default class Player extends Phaser.Sprite {
   constructor({ x, y }) {
@@ -17,7 +14,7 @@ export default class Player extends Phaser.Sprite {
     this.smoothed = true;
 
     game.physics.p2.enable(this, false);
-    this.body.debug = true;
+    // this.body.debug = true;
 
     this.animations.add('walkR', [1, 2]);
     this.animations.add('walk', [6, 7]);
@@ -29,16 +26,32 @@ export default class Player extends Phaser.Sprite {
 
     this.animations.play('idle', 6, true);
 
+
+    // Physics
     this.body.clearShapes();
     this.body.setRectangle(Math.abs(this.width), Math.abs(this.height));
     this.body.fixedRotation = true;
+
+    game.physics.p2.setMaterial(globals.playerMaterial, this.body);
+    const contactMaterial = game.physics.p2.createContactMaterial(globals.playerMaterial, globals.worldMaterial);
+
+    contactMaterial.friction = 0.3; // Friction to use in the contact of these two materials.
+    contactMaterial.restitution = 1.0; // Restitution (i.e. how bouncy it is!) to use in the contact of these two materials.
+    contactMaterial.stiffness = 1e7; // Stiffness of the resulting ContactEquation that this ContactMaterial generate.
+    contactMaterial.relaxation = 3; // Relaxation of the resulting ContactEquation that this ContactMaterial generate.
+    contactMaterial.frictionStiffness = 1e7; // Stiffness of the resulting FrictionEquation that this ContactMaterial generate.
+    contactMaterial.frictionRelaxation = 3; // Relaxation of the resulting FrictionEquation that this ContactMaterial generate.
+    contactMaterial.surfaceVelocity = 0; // Will add surface velocity to this material. If bodyA rests on top if bodyB, and the surface velocity is positive, bodyA will slide to the right.
+
 
     // set up player collision groups
     this.body.setCollisionGroup(globals.playerCollisionGroup);
 
     //  Check for the block hitting an NPC
-    this.body.collides(globals.npcCollisionGroup, this.particleBurst, this);
-    this.body.collides(globals.wallCollisionGroup, () => {}, this);
+    this.body.collides(globals.npcCollisionGroup, () => {}, this);
+    this.body.collides(globals.wallCollisionGroup, () => {
+      globals.game.camera.shake(0.002, 50);
+    }, this);
 
     // a character has some preferences
     // like they enjoy coffee or tilework or cafes or reading or parties or nightclubs
@@ -55,18 +68,6 @@ export default class Player extends Phaser.Sprite {
     // your character likes better?
   }
 
-  particleBurst(pointer) {
-    console.log('blam');
-    globals.emitter.x = globals.player.x;
-    globals.emitter.y = globals.player.y;
-
-    //  The first parameter sets the effect to "explode" which means all particles are emitted at once
-    //  The second gives each particle a 2000ms lifespan
-    //  The third is ignored when using burst/explode mode
-    //  The final parameter (10) is how many particles will be emitted in this single burst
-    globals.emitter.start(true, 2000, null, 10);
-  }
-
   update() {
     const {
       cursors
@@ -75,7 +76,7 @@ export default class Player extends Phaser.Sprite {
     this.body.setZeroVelocity();
 
     // interaction key animation
-    globals.actionKey.onDown.add(this.particleBurst, this);
+    // globals.actionKey.onDown.add(this.particleBurst, this);
 
     // walking/interaction animation
     if (cursors.left.isDown) {
