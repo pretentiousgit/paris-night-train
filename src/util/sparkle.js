@@ -6,10 +6,9 @@ function initEmitter(x, y) {
   globals.emitter.gravity = 200;
 }
 
-function particleBurst() {
-  console.log('blam');
-  globals.emitter.x = globals.player.x;
-  globals.emitter.y = globals.player.y;
+function particleBurst(x, y) {
+  globals.emitter.x = x || globals.player.x;
+  globals.emitter.y = y || globals.player.y;
 
   //  The first parameter sets the effect to "explode" which means all particles are emitted at once
   //  The second gives each particle a 2000ms lifespan
