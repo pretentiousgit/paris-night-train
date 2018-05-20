@@ -8,10 +8,10 @@ import Enemy1 from '../sprites/Enemy1';
 
 import globals from '../config.globals';
 
-import createCarriage from '../generators/createRoom';
+import createCarriage from '../factories/createRoom';
 import store from '../redux/store';
 
-import { initChart } from '../generators/statsFactory';
+import { initChart } from '../factories/statsFactory';
 
 // You can use subscribe() to update the UI in response to state changes.
 // Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
